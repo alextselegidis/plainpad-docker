@@ -50,7 +50,7 @@ The application is designed to provide a distraction-free note-taking experience
 * Multi-user support.
 * Responsive design for mobile and desktop.
 * Open source and customizable.
-
+* 
 ## Setup
 
 To clone and run this application, you'll need [Git](https://git-scm.com), [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) and [Composer](https://getcomposer.org) installed on your computer. From your command line:
@@ -58,22 +58,28 @@ To clone and run this application, you'll need [Git](https://git-scm.com), [Node
 ```bash
 # Start a MySQL instance
 $ docker run -d --name test-db -e MYSQL_ROOT_PASSWORD=secret -e MYSQL_DATABASE=plainpad mysql:latest
-
 # Pull and run the app
 $ docker run --name test-app -d --link test-db:db -p 80:80 -e DB_HOST=db -e DB_NAME=plainpad -e DB_USERNAME=root -e DB_PASSWORD=secret alextselegidis/plainpad:latest
 ```
 
 Note: If you're using Linux Bash for Windows, [see this guide](https://www.howtogeek.com/261575/how-to-run-graphical-linux-desktop-applications-from-windows-10s-bash-shell/) or use `node` from the command prompt.
 
+## Database Migration
+
+After the application is booted, run the following command to migrate the database:
+
+```bash
+docker exec -it test-app php artisan migrate:fresh --seed --force
+```
+
 ## Docker Compose
 
-You can use the following docker-compose.yml file to locally set up Plainpad with a MySQL database: 
+You can use the following docker-compose.yml file to locally set up Plainpad with a MySQL database:
 
 ```
 services:
-
   plainpad:
-    image: alextselegidis/plainpad:latest
+    image: alextselegidis/plainpad:1.0.0
     ports:
       - '80:80'
     environment:
@@ -83,16 +89,25 @@ services:
       - DB_NAME=plainpad
       - DB_USERNAME=root
       - DB_PASSWORD=secret
-    
+      - MAIL_PROTOCOL=smtp
+      - MAIL_SMTP_DEBUG=0
+      - MAIL_SMTP_AUTH=0
+      - MAIL_SMTP_USER=
+      - MAIL_SMTP_HOST=smtp.example.org
+      - MAIL_SMTP_PASS=
+      - MAIL_SMTP_CRYPTO=ssl
+      - MAIL_SMTP_PORT=465
+      - MAIL_FROM_ADDRESS=info@example.org
+      - MAIL_FROM_NAME=Example
+      - MAIL_REPLY_TO_ADDRESS=info@example.org
   mysql:
     image: mysql:8.0
     environment:
       - MYSQL_ROOT_PASSWORD=secret
-      - MYSQL_DATABASE=plainpad
-      
+      - MYSQL_DATABASE=plainpad     
 ```
 
-## License 
+## License
 
 Code Licensed Under [GPL v3.0](https://www.gnu.org/licenses/gpl-3.0.en.html) | Content Under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/)
 

@@ -53,11 +53,12 @@ The application is designed to provide a distraction-free note-taking experience
 * 
 ## Setup
 
-To clone and run this application, you'll need [Git](https://git-scm.com), [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) and [Composer](https://getcomposer.org) installed on your computer. From your command line:
+To clone and run this application, you'll need a MySQL database. From your console terminal:
 
 ```bash
 # Start a MySQL instance
 $ docker run -d --name test-db -e MYSQL_ROOT_PASSWORD=secret -e MYSQL_DATABASE=plainpad mysql:latest
+
 # Pull and run the app
 $ docker run --name test-app -d --link test-db:db -p 80:80 -e DB_HOST=db -e DB_NAME=plainpad -e DB_USERNAME=root -e DB_PASSWORD=secret alextselegidis/plainpad:latest
 ```

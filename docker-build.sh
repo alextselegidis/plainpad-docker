@@ -25,8 +25,8 @@
 #   ./docker-build.sh 1.5.0
 #
 
-DEFAULT_VERSION=1.5.0
+DEFAULT_VERSION=1.1.1
 
 VERSION="${1:-$DEFAULT_VERSION}"
 
-docker build --tag alextselegidis/plainpad:${VERSION} --build-arg VERSION=${VERSION} .
+docker build --pull --tag alextselegidis/plainpad:${VERSION} --build-arg VERSION=${VERSION} .

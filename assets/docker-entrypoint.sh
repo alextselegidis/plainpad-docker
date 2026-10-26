@@ -45,6 +45,19 @@ fi
 
 chown www-data:www-data /var/www/html/.env
 
+# The .env file above disables setup.php, so install or upgrade the database here (wait up to 60s for it to start)
+cd /var/www/html
+for i in $(seq 1 30); do
+    php -r 'new PDO("mysql:host=" . getenv("DB_HOST") . ";dbname=" . getenv("DB_NAME"), getenv("DB_USERNAME"), getenv("DB_PASSWORD"));' 2>/dev/null && break
+    sleep 2
+done
+if php artisan migrate:status > /dev/null 2>&1; then
+    php artisan migrate --force
+else
+    php artisan migrate --seed --force
+fi
+chown -R www-data:www-data /var/www/html/storage
+
 # Add mod_setenvif snippet to .htaccess if not already present
 if [ -f /var/www/html/public/.htaccess ]; then
     if ! grep -q "SetEnvIf Authorization" /var/www/html/public/.htaccess; then

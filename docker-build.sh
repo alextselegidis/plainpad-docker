@@ -25,7 +25,7 @@
 #   ./docker-build.sh 1.5.0
 #
 
-DEFAULT_VERSION=1.1.1
+DEFAULT_VERSION=1.2.0
 
 VERSION="${1:-$DEFAULT_VERSION}"
 
